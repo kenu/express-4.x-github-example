@@ -1,11 +1,13 @@
-const express = require("express");
-const passport = require("passport");
-const Strategy = require("passport-github").Strategy;
+import express from "express";
+import passport from "passport";
+import { Strategy } from "passport-github2";
+import path from "path";
+const __dirname = path.resolve();
 
-// Configure the Facebook strategy for use by Passport.
+// Configure the GitHub strategy for use by Passport.
 //
 // OAuth 2.0-based strategies require a `verify` function which receives the
-// credential (`accessToken`) for accessing the Facebook API on the user's
+// credential (`accessToken`) for accessing the GitHub API on the user's
 // behalf, along with the user's profile.  The function must invoke `cb`
 // with a user object, which will be set at `req.user` in route handlers after
 // authentication.
@@ -14,12 +16,12 @@ passport.use(
     {
       clientID: process.env["GITHUB_CLIENT_ID"],
       clientSecret: process.env["GITHUB_CLIENT_SECRET"],
-      callbackURL: "/return",
+      callbackURL: "/login/github/return",
     },
     function (accessToken, refreshToken, profile, cb) {
       console.log("accessToken", accessToken);
-      // In this example, the user's Facebook profile is supplied as the user
-      // record.  In a production-quality application, the Facebook profile should
+      // In this example, the user's GitHub profile is supplied as the user
+      // record.  In a production-quality application, the GitHub profile should
       // be associated with a user record in the application's database, which
       // allows for account linking and authentication with other identity
       // providers.
@@ -35,7 +37,7 @@ passport.use(
 // production-quality application, this would typically be as simple as
 // supplying the user ID when serializing, and querying the user record by ID
 // from the database when deserializing.  However, due to the fact that this
-// example does not have a database, the complete Facebook profile is serialized
+// example does not have a database, the complete GitHub profile is serialized
 // and deserialized.
 passport.serializeUser(function (user, cb) {
   cb(null, user);
@@ -46,7 +48,7 @@ passport.deserializeUser(function (obj, cb) {
 });
 
 // Create a new Express application.
-var app = express();
+const app = express();
 
 // Configure view engine to render EJS templates.
 app.set("views", __dirname + "/views");
@@ -54,12 +56,16 @@ app.set("view engine", "ejs");
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
-app.use(require("morgan")("combined"));
-app.use(require("cookie-parser")());
-app.use(require("body-parser").urlencoded({ extended: true }));
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import expressSession from "express-session";
+app.use(morgan("combined"));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
-  require("express-session")({
-    secret: "keyboard cat",
+  expressSession({
+    secret: "github cat",
     resave: true,
     saveUninitialized: true,
   })
@@ -82,16 +88,17 @@ app.get("/login", function (req, res) {
 app.get("/login/github", passport.authenticate("github"));
 
 app.get(
-  "/return",
+  "/login/github/return",
   passport.authenticate("github", { failureRedirect: "/login" }),
-  function (req, res) {
+  function (_req, res) {
     res.redirect("/");
   }
 );
 
+import connectEnsureLogin from "connect-ensure-login";
 app.get(
   "/profile",
-  require("connect-ensure-login").ensureLoggedIn(),
+  connectEnsureLogin.ensureLoggedIn(),
   function (req, res) {
     res.render("profile", { user: req.user });
   }
