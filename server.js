@@ -46,7 +46,7 @@ passport.deserializeUser(function (obj, cb) {
 });
 
 // Create a new Express application.
-var app = express();
+const app = express();
 
 // Configure view engine to render EJS templates.
 app.set("views", __dirname + "/views");
@@ -84,7 +84,7 @@ app.get("/login/github", passport.authenticate("github"));
 app.get(
   "/return",
   passport.authenticate("github", { failureRedirect: "/login" }),
-  function (req, res) {
+  function (_req, res) {
     res.redirect("/");
   }
 );
