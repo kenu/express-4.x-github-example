@@ -19,8 +19,14 @@ The example uses environment variables to configure the consumer key and
 consumer secret needed to access [GitHub's OAuth API](https://github.com/settings/developers). Start the server with those
 variables set to the appropriate credentials.
 
+* `.env`
+```
+GITHUB_CLIENT_ID=__GITHUB_CLIENT_ID__
+GITHUB_CLIENT_SECRET=__GITHUB_CLIENT_SECRET__
+```
+
 ```bash
-GITHUB_CLIENT_ID=__GITHUB_CLIENT_ID__ GITHUB_CLIENT_SECRET=__GITHUB_CLIENT_SECRET__ node server.js
+node server.js
 ```
 
 Open a web browser and navigate to [http://localhost:3000/](http://localhost:3000/)

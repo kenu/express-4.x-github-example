@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import passport from "passport";
 import { Strategy } from "passport-github2";
@@ -96,13 +97,9 @@ app.get(
 );
 
 import connectEnsureLogin from "connect-ensure-login";
-app.get(
-  "/profile",
-  connectEnsureLogin.ensureLoggedIn(),
-  function (req, res) {
-    res.render("profile", { user: req.user });
-  }
-);
+app.get("/profile", connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  res.render("profile", { user: req.user });
+});
 
 app.get("/logout", function (req, res, next) {
   req.logout((err) => {
