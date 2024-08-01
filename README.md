@@ -15,6 +15,13 @@ cd express-4.x-github-example
 npm i
 ```
 
+```json
+    {
+      clientID: process.env["GITHUB_CLIENT_ID"],
+      clientSecret: process.env["GITHUB_CLIENT_SECRET"],
+      callbackURL: "/api/github/return",
+    },
+```
 The example uses environment variables to configure the consumer key and
 consumer secret needed to access [GitHub's OAuth API](https://github.com/settings/developers). Start the server with those
 variables set to the appropriate credentials.

@@ -14,7 +14,7 @@ passport.use(
     {
       clientID: process.env["GITHUB_CLIENT_ID"],
       clientSecret: process.env["GITHUB_CLIENT_SECRET"],
-      callbackURL: "/return",
+      callbackURL: "/api/github/return",
     },
     function (accessToken, refreshToken, profile, cb) {
       console.log("accessToken", accessToken);
@@ -82,7 +82,7 @@ app.get("/login", function (req, res) {
 app.get("/login/github", passport.authenticate("github"));
 
 app.get(
-  "/return",
+  "/api/github/return",
   passport.authenticate("github", { failureRedirect: "/login" }),
   function (_req, res) {
     res.redirect("/");
