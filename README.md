@@ -22,7 +22,7 @@ variables set to the appropriate credentials.
   - http://localhost:3000/login/github/return
 
 ```bash
-GITHUB_CLIENT_ID=__GITHUB_CLIENT_ID__ GITHUB_CLIENT_SECRET=__GITHUB_CLIENT_SECRET__ node server.js
+GITHUB_CLIENT_ID=Ov23liphnuyS9EToOtNG GITHUB_CLIENT_SECRET=7b96ef5eac8f607cc9ed7c41cc7f76b01bef50d8 node server.js
 ```
 
 Open a web browser and navigate to [http://localhost:3000/](http://localhost:3000/)
